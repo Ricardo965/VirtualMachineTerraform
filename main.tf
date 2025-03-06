@@ -1,4 +1,4 @@
-# main.tf con los cambios necesarios
+
 
 terraform {
   required_providers {
@@ -11,21 +11,21 @@ terraform {
 
 provider "azurerm" {
   features {}
-  
-  # Las credenciales se pasarán a través de variables de entorno o tfvars
+
+
   subscription_id = var.subscription_id
   client_id       = var.client_id
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
 }
 
-# Crear un grupo de recursos
+
 resource "azurerm_resource_group" "rg_vms" {
   name     = var.resource_group_name
   location = var.location
 }
 
-# Red Virtual
+
 resource "azurerm_virtual_network" "vnet" {
   name                = "${var.project_prefix}-vnet"
   address_space       = ["10.0.0.0/16"]
@@ -33,7 +33,7 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = azurerm_resource_group.rg_vms.name
 }
 
-# Subred
+
 resource "azurerm_subnet" "subnet" {
   name                 = "${var.project_prefix}-subnet"
   resource_group_name  = azurerm_resource_group.rg_vms.name
@@ -41,7 +41,7 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = ["10.0.1.0/24"]
 }
 
-# IP Pública para Windows Server
+
 resource "azurerm_public_ip" "pip_windows" {
   name                = "${var.project_prefix}-pip-win"
   location            = azurerm_resource_group.rg_vms.location
@@ -50,7 +50,7 @@ resource "azurerm_public_ip" "pip_windows" {
   sku                 = "Standard"
 }
 
-# IP Pública para Ubuntu
+
 resource "azurerm_public_ip" "pip_ubuntu" {
   name                = "${var.project_prefix}-pip-ubu"
   location            = azurerm_resource_group.rg_vms.location
@@ -59,7 +59,7 @@ resource "azurerm_public_ip" "pip_ubuntu" {
   sku                 = "Standard"
 }
 
-# Network Security Group para Windows
+
 resource "azurerm_network_security_group" "nsg_windows" {
   name                = "${var.project_prefix}-nsg-win"
   location            = azurerm_resource_group.rg_vms.location
@@ -78,7 +78,7 @@ resource "azurerm_network_security_group" "nsg_windows" {
   }
 }
 
-# Network Security Group para Ubuntu
+
 resource "azurerm_network_security_group" "nsg_ubuntu" {
   name                = "${var.project_prefix}-nsg-ubu"
   location            = azurerm_resource_group.rg_vms.location
@@ -97,7 +97,7 @@ resource "azurerm_network_security_group" "nsg_ubuntu" {
   }
 }
 
-# Interfaces de red para Windows
+
 resource "azurerm_network_interface" "nic_windows" {
   name                = "${var.project_prefix}-nic-win"
   location            = azurerm_resource_group.rg_vms.location
@@ -111,7 +111,7 @@ resource "azurerm_network_interface" "nic_windows" {
   }
 }
 
-# Interfaces de red para Ubuntu
+
 resource "azurerm_network_interface" "nic_ubuntu" {
   name                = "${var.project_prefix}-nic-ubu"
   location            = azurerm_resource_group.rg_vms.location
@@ -125,10 +125,10 @@ resource "azurerm_network_interface" "nic_ubuntu" {
   }
 }
 
-# Máquina Virtual Windows Server
+
 resource "azurerm_windows_virtual_machine" "vm_windows" {
   name                = "${var.project_prefix}-win"
-  computer_name       = "winserver"        # Nombre explícito de 15 caracteres o menos
+  computer_name       = "winserver"
   resource_group_name = azurerm_resource_group.rg_vms.name
   location            = azurerm_resource_group.rg_vms.location
   size                = var.windows_vm_size
@@ -151,10 +151,10 @@ resource "azurerm_windows_virtual_machine" "vm_windows" {
   }
 }
 
-# Máquina Virtual Ubuntu
+
 resource "azurerm_linux_virtual_machine" "vm_ubuntu" {
   name                = "${var.project_prefix}-ubu"
-  computer_name       = "ubuntu"          # Nombre explícito de 15 caracteres o menos
+  computer_name       = "ubuntu"
   resource_group_name = azurerm_resource_group.rg_vms.name
   location            = azurerm_resource_group.rg_vms.location
   size                = var.ubuntu_vm_size
@@ -181,12 +181,12 @@ resource "azurerm_linux_virtual_machine" "vm_ubuntu" {
   }
 }
 
-# Asociar NSG a interfaces de red - Con dependencias explícitas
+
 resource "azurerm_network_interface_security_group_association" "windows_nsg_assoc" {
   network_interface_id      = azurerm_network_interface.nic_windows.id
   network_security_group_id = azurerm_network_security_group.nsg_windows.id
-  
-  # Esperar a que la red y el grupo de seguridad estén listos
+
+
   depends_on = [
     azurerm_network_interface.nic_windows,
     azurerm_network_security_group.nsg_windows
@@ -196,8 +196,8 @@ resource "azurerm_network_interface_security_group_association" "windows_nsg_ass
 resource "azurerm_network_interface_security_group_association" "ubuntu_nsg_assoc" {
   network_interface_id      = azurerm_network_interface.nic_ubuntu.id
   network_security_group_id = azurerm_network_security_group.nsg_ubuntu.id
-  
-  # Esperar a que la red y el grupo de seguridad estén listos
+
+
   depends_on = [
     azurerm_network_interface.nic_ubuntu,
     azurerm_network_security_group.nsg_ubuntu
