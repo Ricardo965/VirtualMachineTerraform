@@ -40,23 +40,6 @@ variable "location" {
   default     = "eastus"
 }
 
-# Variables para máquina Windows
-variable "windows_vm_size" {
-  description = "Tamaño de la máquina virtual Windows"
-  type        = string
-  default     = "Standard_B2s"
-}
-
-variable "windows_admin_username" {
-  description = "Nombre de usuario administrador para Windows"
-  type        = string
-}
-
-variable "windows_admin_password" {
-  description = "Contraseña de administrador para Windows"
-  type        = string
-  sensitive   = true
-}
 
 # Variables para máquina Ubuntu
 variable "ubuntu_vm_size" {
@@ -70,7 +53,7 @@ variable "ubuntu_admin_username" {
   type        = string
 }
 
-variable "ubuntu_ssh_public_key_path" {
-  description = "Ruta a la clave pública SSH para Ubuntu"
+variable "ubuntu_admin_password" {
+  description = "Clave de usuario administrador para Ubuntu"
   type        = string
 }
