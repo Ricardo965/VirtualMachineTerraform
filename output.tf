@@ -1,6 +1,3 @@
-# outputs.tf
-# Salidas para mostrar información de las máquinas virtuales
-
 output "windows_vm_name" {
   description = "Nombre de la máquina virtual Windows"
   value       = azurerm_windows_virtual_machine.vm_windows.name
