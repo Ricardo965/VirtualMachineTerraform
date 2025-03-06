@@ -134,7 +134,9 @@ Después de la implementación, me conecté a las VMs de la siguiente manera:
   ```bash
   ssh -i ~/.ssh/id_rsa adminuser@IP_PUBLICA_UBUNTU
   ```
-
+  Sin embargo, para conectarme con usuario y contraseña. En el repo se encuentra una segunda rama con el HCL para realizarlo.
+  La variacion es dentro del **secrets.tfvars** crear una variable llamada **ubuntu_admin_password** y seguir el flujo descrito en esta guia.
+  
 ---
 
 ## **8. Consideraciones de Seguridad**
@@ -145,18 +147,20 @@ Para proteger mis credenciales y la infraestructura:
 
 El cual debe contener las siguientes variables:
 
-subscription_id = ""
-client_id = ""
-tenant_id = ""
-client_secret = ""
-
-windows_admin_username = ""
-windows_admin_password = ""
-ubuntu_admin_username = ""
-ubuntu_ssh_public_key_path = "pathToRSAKey"
-
-project_prefix = "proyectovm"
-location = "zona"
+```bash
+  subscription_id = ""
+  client_id = ""
+  tenant_id = ""
+  client_secret = ""
+  
+  windows_admin_username = ""
+  windows_admin_password = ""
+  ubuntu_admin_username = ""
+  ubuntu_ssh_public_key_path = "pathToRSAKey"
+  
+  project_prefix = "proyectovm"
+  location = "zona"
+```
 
 ---
 
