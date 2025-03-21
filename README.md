@@ -2,7 +2,7 @@
 
 ## Introducción
 
-En este documento, describo en primera persona el proceso que seguí para crear una infraestructura en Azure utilizando Terraform. El objetivo era desplegar dos máquinas virtuales, una con Windows Server y otra con Ubuntu, cada una con su respectiva configuración de red y seguridad.
+En este documento, describo el proceso que seguí para crear una infraestructura en Azure utilizando Terraform. El objetivo era desplegar dos máquinas virtuales, una con Windows Server y otra con Ubuntu, cada una con su respectiva configuración de red y seguridad.
 
 ---
 
